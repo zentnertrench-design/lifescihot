@@ -232,7 +232,7 @@ export function enforceIdentity(input: TranslateInput, copy: { titleZh: string; 
 
 // ── Answer-first summary length ──────────────────────────────────────────────────────────────
 
-export function compactAnswerFirstSummary(summary: string, maxChars = 190): string {
+export function compactAnswerFirstSummary(summary: string, maxChars = 500): string {
   const text = summary.trim().replace(/\s*\n+\s*/g, " ");
   if (text.length <= maxChars) return text;
   const sentences = text.match(/[^。！？!?]+[。！？!?]?/gu) ?? [text];
@@ -240,7 +240,7 @@ export function compactAnswerFirstSummary(summary: string, maxChars = 190): stri
   for (const sentence of sentences) {
     if ((result + sentence).length > maxChars) break;
     result += sentence;
-    if (result.length >= 80) break;
+    if (result.length >= 300) break;
   }
   if (result.length >= 50) return result.trim();
   // The first sentence alone is too long: cut at a clause boundary, never inside a name or number.
@@ -249,7 +249,7 @@ export function compactAnswerFirstSummary(summary: string, maxChars = 190): stri
   for (const clause of clauses) {
     if ((result + clause).length + 1 > maxChars) break;
     result += clause;
-    if (result.length >= 80) break;
+    if (result.length >= 300) break;
   }
   return result.length >= 50 ? `${result.replace(/[，；：、,;:]$/u, "")}。` : text;
 }
@@ -259,7 +259,7 @@ function answerFirstSummaryLengthOk(summary: string, input: TranslateInput): boo
   const sourceLength = (input.sourceKind === "x_search" ? input.text : cleanArticleTextForLLM(input.text)).trim().length;
   const sentences = trimmed.split(/[。！？!?]+/u).map((p) => p.trim()).filter(Boolean).length;
   const rich = sourceLength >= 500;
-  return trimmed.length <= 200 && trimmed.length >= (rich ? 80 : 50) && sentences <= 3 && (!rich || sentences >= 2);
+  return trimmed.length <= 520 && trimmed.length >= (rich ? 80 : 50) && sentences <= 8 && (!rich || sentences >= 2);
 }
 
 export const isShortTweetInput = (input: TranslateInput) => input.sourceKind === "x_search" && isShortTweet(input.mainText || input.title);
