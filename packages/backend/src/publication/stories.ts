@@ -1,5 +1,5 @@
 // Stories (events) and the hot ranking through the public read layer. The website sees heat values;
-// v1 / MCP / Skill only see ranks and counts.
+// v1 only sees ranks and counts.
 import type { HeatPoint, HotResponse, StoryDetail, StoryReportView } from "@aihot/contracts/site";
 import { sql } from "../db.ts";
 import { proxiedImage, proxiedImageSet } from "../media/imgproxy.ts";

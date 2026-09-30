@@ -13,7 +13,6 @@ import { registerV1, registerV1Fallbacks } from "./routes/v1.ts";
 import { registerMedia } from "./routes/media.ts";
 import { registerFeeds } from "./routes/feeds.ts";
 import { registerStatic } from "./routes/static.ts";
-import { registerMcp } from "./routes/mcp.ts";
 import { sendProblem } from "./http/respond.ts";
 
 export async function buildApp(): Promise<FastifyInstance> {
@@ -35,7 +34,7 @@ export async function buildApp(): Promise<FastifyInstance> {
     const path = (req.raw.url ?? "").split("?")[0] ?? "/";
     // The reverse proxy logs every request; the process only notes the slow and the failed.
     const ms = Math.round(reply.elapsedTime);
-    if (reply.statusCode >= 500 || (ms >= 1000 && path !== "/api/mcp" && !path.startsWith("/api/img-proxy"))) {
+    if (reply.statusCode >= 500 || (ms >= 1000 && !path.startsWith("/api/img-proxy"))) {
       req.log.warn({ method: req.method, path, status: reply.statusCode, ms }, "request");
     }
   });
@@ -75,7 +74,6 @@ export async function buildApp(): Promise<FastifyInstance> {
 
   registerFeeds(app);
   registerStatic(app);
-  registerMcp(app);
   registerV1Fallbacks(app);
 
   app.setNotFoundHandler((req, reply) => {

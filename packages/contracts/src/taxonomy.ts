@@ -8,7 +8,7 @@ export const CATEGORY_KEYS = CATEGORIES.map((c) => c.key) as unknown as readonly
 /** Website tab labels. */
 export const CATEGORY_LABELS = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.label])) as Record<CategoryKey, string>;
 
-/** The public API, RSS and MCP use the same categories as the website. */
+/** The public API and RSS use the same categories as the website. */
 export const PUBLIC_API_CATEGORY_KEYS = CATEGORY_KEYS;
 export type PublicApiCategoryKey = CategoryKey;
 

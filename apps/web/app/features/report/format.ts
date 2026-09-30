@@ -133,7 +133,7 @@ const METRICS: Array<[key: string, unit: string]> = [
   ["totalStories", "件大事"],
   ["sourcesCount", "个来源"],
   ["firstPartyEvents", "件一手发布"],
-  ["modelsReleased", "个新模型"],
+  ["modelsReleased", "项研究进展"],
   ["selectedCount", "条精选"],
   ["reportsCovered", "期日报"],
 ];

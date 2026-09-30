@@ -41,7 +41,7 @@ export interface RedirectRule {
 export const REDIRECTS: RedirectRule[] = [
   {
     match: "regex",
-    path: "^/(all|about|agent|changelog|codex-reset|feedback|starred|more|privacy|terms)/+$",
+    path: "^/(all|about|codex-reset|feedback|starred|more|privacy|terms)/+$",
     status: 301,
     location: "/$1",
     keepQuery: true,
@@ -89,17 +89,11 @@ export function resolveRedirect(pathname: string, search: string): RedirectDecis
   return null;
 }
 
-/** OAuth discovery probes from MCP clients: a cheap 404, never a rendered page. */
+/** OAuth discovery probes: a cheap 404, never a rendered page. */
 export const OAUTH_PROBE_PATHS = [
   "/.well-known/oauth-protected-resource",
-  "/.well-known/oauth-protected-resource/api/mcp",
   "/.well-known/oauth-authorization-server",
-  "/.well-known/oauth-authorization-server/api/mcp",
   "/.well-known/openid-configuration",
-  "/.well-known/openid-configuration/api/mcp",
-  "/api/mcp/.well-known/oauth-protected-resource",
-  "/api/mcp/.well-known/oauth-authorization-server",
-  "/api/mcp/.well-known/openid-configuration",
 ];
 
 /**
@@ -112,7 +106,7 @@ export const API_OWNED_PATTERNS: RegExp[] = [
   /^\/feed(\.xml|\/.*)?$/,
   /^\/(rss|rss\.xml|atom\.xml)$/,
   /^\/openapi-v1\.json$/,
-  /^\/(llms\.txt|robots\.txt|sitemap\.xml|manifest\.webmanifest)$/,
+  /^\/(robots\.txt|sitemap\.xml|manifest\.webmanifest)$/,
   /^\/sitemaps\//,
   /^\/\.well-known\//,
   /^\/(favicon\.ico|icon\.png|icon-192\.png|apple-icon\.png|logo\.svg)$/,

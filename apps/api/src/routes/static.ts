@@ -1,4 +1,4 @@
-// Discovery and static files: sitemap, llms.txt, robots, security.txt, the web manifest, the OpenAPI
+// Discovery and static files: sitemap, robots, security.txt, the web manifest, the OpenAPI
 // document, icons, the IndexNow key, leaderboard logos and the about page's contact codes.
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
@@ -10,7 +10,6 @@ import { CATEGORY_KEYS } from "@aihot/contracts/taxonomy";
 import { REPO_ROOT, config } from "@aihot/backend/config";
 import { applyPublicHeaders, sendTextWithEtag } from "../http/respond.ts";
 import { sitemapXml } from "@aihot/backend/publication/sitemap";
-import { llmsTxt, loadLlmsAvailability } from "@aihot/backend/publication/llms";
 
 const REF = path.join(REPO_ROOT, "reference");
 const ASSETS = path.join(REPO_ROOT, "assets");
@@ -57,7 +56,6 @@ function robotsTxt(): string {
   return [
     "User-agent: *",
     "Allow: /api/v1/",
-    "Allow: /api/mcp",
     "Disallow: /api/",
     "Disallow: /admin/",
     "Disallow: /starred",
@@ -117,12 +115,6 @@ export function registerStatic(app: FastifyInstance) {
       req.log.error({ err: error }, "sitemap unavailable");
       return reply.code(503).header("Retry-After", "300").header("Cache-Control", "no-store").send("Sitemap temporarily unavailable");
     }
-  });
-
-  app.get("/llms.txt", async (req, reply) => {
-    const text = llmsTxt(await loadLlmsAvailability());
-    applyPublicHeaders(reply, { cors: false });
-    return sendTextWithEtag(req, reply, text, { etagPrefix: "llms", cacheControl: "public, s-maxage=3600, stale-while-revalidate=86400", contentType: "text/plain; charset=utf-8" });
   });
 
   app.get("/robots.txt", (req, reply) => sendTextWithEtag(req, reply, robotsTxt(), { etagPrefix: "robots", cacheControl: "public, max-age=3600", contentType: "text/plain; charset=utf-8" }));

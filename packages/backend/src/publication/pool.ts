@@ -68,7 +68,7 @@ export function directMatchCondition(terms: string[]) {
 }
 
 /**
- * The public APIs' q (v1 and MCP): every term matches the subject, title or summary, or
+ * The public API's q (v1): every term matches the subject, title or summary, or
  * the start of a body whose full text may be shown, as the API documents it ("title / Chinese
  * title / Chinese summary / body"). Results stay in time order.
  */

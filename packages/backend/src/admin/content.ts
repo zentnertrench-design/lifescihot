@@ -78,7 +78,7 @@ async function overrideRow(id: string) {
 }
 
 /**
- * Public / summary-only / withdrawn. Applies to the site, API, RSS, MCP, the sync ledger and the
+ * Public / summary-only / withdrawn. Applies to the site, API, RSS, the sync ledger and the
  * search index through the one publication projection; ETags change with the content.
  */
 export async function setVisibility(id: string, input: { visibility: "public" | "summary-only" | "withdrawn"; reason: string; version: number }, actor: string) {

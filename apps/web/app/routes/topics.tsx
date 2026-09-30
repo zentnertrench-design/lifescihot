@@ -18,7 +18,7 @@ export async function loader({ request }: { request: Request }) {
 }
 
 export function meta() {
-  return pageMeta({ title: "主题", description: "按公司与模型、技术方向、内容形态聚合的 AI 主题页：OpenAI、Anthropic、Agent、多模态、论文与教程等 38 个方向。", path: "/topics", image: "/og/pages/topics.png" });
+  return pageMeta({ title: "主题", description: "按机构与公司、研究方向、内容形态聚合的主题页：DeepMind、Isomorphic Labs、AI 制药、医学影像、论文与临床试验等 32 个方向。", path: "/topics", image: "/og/pages/topics.png" });
 }
 
 export function headers() {

@@ -110,7 +110,7 @@ function stagesOf(stats: SiteStats | null): Stage[] {
       title: "成刊",
       figure: stats && <Figure n={stats.dailies} unit="期日报" />,
       text: ABOUT.steps.publish,
-      note: "也可以用 RSS、API、MCP 订阅",
+      note: "也可以用 RSS 订阅",
     },
   ];
 }
@@ -156,11 +156,7 @@ function Maker({ maker, contact }: { maker: NonNullable<typeof ABOUT.maker>; con
             <p key={line}>{line}</p>
           ))}
           <p className="text-ink-3">
-            它一直在改，改了什么都写在
-            <Link to="/changelog" className="text-accent hover:underline">
-              更新日志
-            </Link>
-            里；有想法、遇到问题，去
+            有想法、遇到问题，去
             <Link to="/feedback" className="text-accent hover:underline">
               反馈页
             </Link>
@@ -227,13 +223,31 @@ export default function AboutPage() {
             ))}
           </p>
         </div>
-        <div className="flex flex-wrap gap-3 lg:pb-2">
-          <Link to="/" prefetch="intent" className={buttonClass("primary", "lg")}>
-            看今天的精选 <IconArrowRight size={15} />
-          </Link>
-          <Link to="/daily" prefetch="intent" className={buttonClass("secondary", "lg")}>
-            读最新{withSubject("日报")}
-          </Link>
+        <div className="flex flex-col items-start justify-between gap-6 self-stretch lg:items-end lg:pb-2">
+          {ABOUT.wechatCard && (
+            <figure className="w-[252px] shrink-0 rounded-card border border-line bg-white p-2.5 sm:w-[272px]">
+              <img
+                src={ABOUT.wechatCard.image}
+                alt={`微信公众号 ${ABOUT.wechatCard.name} 的二维码与搜一搜入口`}
+                width={430}
+                height={202}
+                className="w-full rounded-[8px]"
+              />
+              <figcaption className="px-1 pb-1 pt-2 text-center text-[12px] leading-[1.7] text-[#4b5563]">
+                <span className="font-semibold text-[#111827]">微信公众号 · {ABOUT.wechatCard.name}</span>
+                <br />
+                {ABOUT.wechatCard.note}
+              </figcaption>
+            </figure>
+          )}
+          <div className="flex flex-wrap gap-3 lg:justify-end">
+            <Link to="/" prefetch="intent" className={buttonClass("primary", "lg")}>
+              看今天的精选 <IconArrowRight size={15} />
+            </Link>
+            <Link to="/daily" prefetch="intent" className={buttonClass("secondary", "lg")}>
+              读最新{withSubject("日报")}
+            </Link>
+          </div>
         </div>
       </header>
 

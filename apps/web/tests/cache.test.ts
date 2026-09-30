@@ -14,16 +14,11 @@ let origin: string;
 let logs = "";
 let deadline: number;
 let refreshAt: string;
-let metaDelayMs = 0;
 const apiCookies: Array<string | undefined> = [];
 const api = createServer((req, res) => {
   const url = new URL(req.url!, "http://api.local");
   apiCookies.push(req.headers.cookie);
   res.setHeader("Content-Type", "application/json");
-  if (url.pathname === "/api/site/meta") {
-    const respond = () => res.end(JSON.stringify({ changelogVersion: "2026-09-28T12:00" }));
-    return metaDelayMs ? setTimeout(respond, metaDelayMs) : respond();
-  }
   if (url.pathname === "/api/site/timeline") {
     const filters = { channel: "all", category: url.searchParams.get("category"), tag: null, topic: null };
     res.setHeader("X-Accel-Expires", `@${deadline}`);
@@ -84,7 +79,7 @@ test("public route subsets produce the same complete navigation data; filters st
     assert.equal(res.headers.get("X-Accel-Expires"), `@${deadline}`);
     assert.doesNotMatch(res.headers.get("Cache-Control")!, /stale/);
     const body = await res.text();
-    assert.ok(body.includes("root") && body.includes("routes/home"));
+    assert.ok(body.includes("routes/home"));
     return body;
   }));
   assert.ok(answers.every((body) => body === answers[0]));
@@ -161,7 +156,7 @@ test("an elapsed release deadline cannot be extended by a fresh page/data respon
   assert.equal(headers["X-Accel-Expires"], upstream.get("X-Accel-Expires"));
 });
 
-test("browser freshness shares the selected deadline, including slow sibling loaders", async () => {
+test("browser freshness shares the selected deadline", async () => {
   const savedDeadline = deadline;
   const savedRefresh = refreshAt;
   try {
@@ -179,21 +174,9 @@ test("browser freshness shares the selected deadline, including slow sibling loa
       assert.doesNotMatch(cc, /stale/);
       await res.text();
     }
-    // The selected loader initially grants a positive TTL, but root metadata finishes after it.
-    deadline = Math.floor(Date.now() / 1000) + 2;
-    refreshAt = new Date((deadline + 5) * 1000).toISOString();
-    metaDelayMs = 2300;
-    await Promise.all(["/", "/_.data?_routes=routes%2Fhome"].map(async (pathname) => {
-      const res = await fetch(origin + pathname);
-      assert.equal(res.status, 200);
-      assert.equal(res.headers.get("Cache-Control"), "no-cache");
-      assert.equal(res.headers.get("X-Accel-Expires"), "0");
-      await res.text();
-    }));
   } finally {
     deadline = savedDeadline;
     refreshAt = savedRefresh;
-    metaDelayMs = 0;
   }
 });
 
