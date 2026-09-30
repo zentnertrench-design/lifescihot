@@ -60,7 +60,7 @@ export async function composeStoryDigest(storyId: number, opts: { afterCorrectio
     : `事件当前标题：${story.title}\n${story.digest ? `上一版综述：${story.digest}\n` : ""}\n报道（按时间，标【新】的是上一版之后的新报道）：\n${lines.join("\n")}`;
   const res = await chatJson({
     model: await modelFor("digest"), purpose: "story_digest", subject: `story:${storyId}@${ids.length}`, promptVersion: DIGEST_PROMPT_VERSION,
-    system: SYSTEM, user, schema: Schema, temperature: 0.3, maxTokens: 1200,
+    system: SYSTEM, user, schema: Schema, temperature: 0.3, maxTokens: 2000,
   });
   const version = story.version + 1;
   await sql.begin(async (tx) => {
